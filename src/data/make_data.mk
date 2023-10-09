@@ -17,6 +17,7 @@ VAR_FILTER=$(VPATH)variable_filter_list.txt
 CSV_FILES=$(patsubst %.sav,$(DINT)%.csv,$(SPSS_FILES))
 SPLT_CSV=$(DINT)formatted_bp_data.csv
 MRG_CSV=$(DINT)data_merged.csv
+FILT_TAC=$(VPATH)filtered_tac.csv
 BP_FILT_CSV=$(DINT)bp_db_filtered.csv
 BP_ALL_CSV=$(DINT)bp_db_all.csv
 
@@ -36,7 +37,7 @@ $(BP_FILT_CSV): $(MRG_CSV)
 	< $< csvcut -c $(DB_COLS) > $@
 
 # Merge all CSV files into one using the patientID as an index
-$(MRG_CSV): $(SPLT_CSV) $(CSV_FILES) $(IMA_CSV)
+$(MRG_CSV): $(SPLT_CSV) $(CSV_FILES) $(IMA_CSV) $(FILT_TAC)
 	csvjoin --left -c patientID $^ > $@
 
 # Expand the semicolon delim'd bps and change participant_id to patientID

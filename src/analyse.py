@@ -17,8 +17,7 @@ runs = [
 group_opts = ["age_5yr", "age_10yr", "smoking_status"]
 demo_params = [
     'age', 'height', 'weight', 'bp_tlv', 'pack_years',
-    'fev1', 'fev1_pp', 'fvc', 'fev1_fvc', 'bp_pi10', 'bp_wap_avg', 'bp_la_avg',
-    'bp_wt_avg', 'bp_afd', 'bp_tcount', 'bp_airvol', 'taper_gen3', 'taper_gen4', 'taper_gen5', 'taper_gen6'
+    'fev1', 'fev1_pp', 'fvc', 'fev1_fvc', 'bp_tcount', 'tac'
 ]
 # Whether to scale all parameters to [0, 1] before plotting/regression
 min_max_params = False
@@ -48,16 +47,17 @@ def main(args):
 
     main_out_dir = main_out_dir / args.group_by
 
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # breakpoint()
+
     # Normalise parameters if specified (height is default)
     if args.normalised:
         data = normalise_bps(data, bps)
         main_out_dir = main_out_dir / "normalised"
     else:
         main_out_dir = main_out_dir / "not-normalised"
-
-    import seaborn as sns
-    import matplotlib.pyplot as plt
-    breakpoint()
 
     run_funcs = {
         runs[0]:
@@ -81,15 +81,22 @@ def main(args):
             univariate.fit_analyse(data.copy(deep=True), bps, "bmi", out_path, min_max_params),
             univariate.fit_analyse(data.copy(deep=True), bps, "pack_years",
                                    out_path, min_max_params),
-            univariate.fit_analyse(data.copy(deep=True), bps, "taper_gen5",
+            univariate.fit_analyse(data.copy(deep=True), bps, "bp_tcount",
                                    out_path, min_max_params),
-            univariate.fit_analyse(data.copy(deep=True), bps, "taper_gen6",
+            univariate.fit_analyse(data.copy(deep=True), bps, "bp_wap_avg",
                                    out_path, min_max_params),
-            univariate.fit_analyse(data.copy(deep=True), bps, "taper_gen4",
+            univariate.fit_analyse(data.copy(deep=True), bps, "bp_la_avg",
                                    out_path, min_max_params),
-            univariate.fit_analyse(data.copy(deep=True), bps, "taper_gen3",
+            univariate.fit_analyse(data.copy(deep=True), bps, "bp_pi10",
                                    out_path, min_max_params),
-
+            univariate.fit_analyse(data.copy(deep=True), bps, "fev1",
+                                   out_path, min_max_params),
+            univariate.fit_analyse(data.copy(deep=True), bps, "fev1_fvc",
+                                   out_path, min_max_params),
+            univariate.fit_analyse(data.copy(deep=True), bps, "fev1_pp",
+                                   out_path, min_max_params),
+            univariate.fit_analyse(data.copy(deep=True), bps, "fvc",
+                                   out_path, min_max_params),
             multivariate.fit_analyse(data.copy(deep=True), bps, out_path,
                                      min_max_params),
         ),
