@@ -20,6 +20,7 @@ def fit_analyse(data, bps, out_path, min_max_params=False):
             "weight",
             "current_smoker",
             "pack_year_categories",
+            "tac"
         ]
 
         # Normalising the data

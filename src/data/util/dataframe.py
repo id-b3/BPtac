@@ -26,10 +26,10 @@ def get_group(df, group: str="healthy"):
         df_group = df[healthy_mask]
     elif group == "unhealthy":
         df_group = df[~healthy_mask]
-        df_group = df_group.dropna(subset=["sex"])
     elif group == "all":
+        df["healthy"] = healthy_mask
+        df["healthy"].replace({True: "healthy", False: "unhealthy"}, inplace=True)
         df_group = df
-        df_group = df_group.dropna(subset=["sex"])
     else:
         raise ValueError("Invalid group name: " + group)
 

@@ -14,7 +14,7 @@ from visualization import violin, regression, percentile
 runs = [
     "descriptive", "comparative", "regression", "clustering", "visualisation"
 ]
-group_opts = ["age_5yr", "age_10yr", "smoking_status"]
+group_opts = ["age_5yr", "age_10yr", "smoking_status", "healthy"]
 demo_params = [
     'age', 'height', 'weight', 'bp_tlv', 'pack_years',
     'fev1', 'fev1_pp', 'fvc', 'fev1_fvc', 'bp_tcount', 'tac'
@@ -47,11 +47,6 @@ def main(args):
 
     main_out_dir = main_out_dir / args.group_by
 
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
-    # breakpoint()
-
     # Normalise parameters if specified (height is default)
     if args.normalised:
         data = normalise_bps(data, bps)
@@ -65,7 +60,7 @@ def main(args):
             demographics.calc_demographics(data.copy(deep=True), demo_params, out_path,
                                            args.group_by),
             flowchart.make_chart(data_all.copy(deep=True), out_path),
-            reference_values.create_table(data.copy(deep=True), bps, out_path, args.group_by),
+            # reference_values.create_table(data.copy(deep=True), bps, out_path, args.group_by),
 
         ),
         runs[1]:
@@ -97,14 +92,14 @@ def main(args):
                                    out_path, min_max_params),
             univariate.fit_analyse(data.copy(deep=True), bps, "fvc",
                                    out_path, min_max_params),
-            multivariate.fit_analyse(data.copy(deep=True), bps, out_path,
-                                     min_max_params),
+            multivariate.fit_analyse(data.copy(deep=True), ["fev1_pp", "fev1_fvc"], out_path,
+                                     True),
         ),
         runs[3]:
         lambda: (),
         runs[4]:
         lambda: (
-            percentile.make_plots(data.copy(deep=True), bps, out_path),
+            # percentile.make_plots(data.copy(deep=True), bps, out_path),
             violin.make_plots(data.copy(deep=True), bps, out_path),
             regression.make_plots(data.copy(deep=True), bps, out_path, min_max_params),
         ),
